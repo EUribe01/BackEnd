@@ -1,0 +1,763 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KNG8_ProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BITACORA">
+          <Key>
+            <PropertyRef Name="ConsecutivoError" />
+          </Key>
+          <Property Name="ConsecutivoError" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsecutivoUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="CodigoError" Type="int" Nullable="false" />
+          <Property Name="DescripcionBitacora" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Origen" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Citas">
+          <Key>
+            <PropertyRef Name="CitaID" />
+          </Key>
+          <Property Name="CitaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsecutivoUsuario" Type="int" Nullable="false" />
+          <Property Name="TipoID" Type="int" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="DescripcionCitas" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Correos">
+          <Key>
+            <PropertyRef Name="ConsecutivoCorreos" />
+          </Key>
+          <Property Name="ConsecutivoCorreos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsecutivoUsuario" Type="int" Nullable="false" />
+          <Property Name="To" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="CC" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Subject" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Estados">
+          <Key>
+            <PropertyRef Name="ConsecutivoEstado" />
+          </Key>
+          <Property Name="ConsecutivoEstado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DescripcionEstado" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Expediente">
+          <Key>
+            <PropertyRef Name="ConsecutivoExpediente" />
+          </Key>
+          <Property Name="ConsecutivoExpediente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsecutivoUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="DescripcionExpediente" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Odontograma">
+          <Key>
+            <PropertyRef Name="OdontogramaID" />
+          </Key>
+          <Property Name="OdontogramaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConsecutivoUsuario" Type="int" Nullable="false" />
+          <Property Name="NDiente" Type="int" Nullable="false" />
+          <Property Name="CoordenadaUno" Type="int" />
+          <Property Name="CoordenadaDos" Type="int" />
+          <Property Name="CoordenadaTres" Type="int" />
+          <Property Name="CoordenadaCuatro" Type="int" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TiposCitas">
+          <Key>
+            <PropertyRef Name="TipoID" />
+          </Key>
+          <Property Name="TipoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DescripcionTiposCitas" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="ConsecutivoUsuario" />
+          </Key>
+          <Property Name="ConsecutivoUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreCompleto" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Cedula" Type="int" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="Contrasenna" Type="varchar" MaxLength="75" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="date" Nullable="false" />
+          <Property Name="Telefono" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="EstadoID" Type="int" Nullable="false" />
+          <Property Name="ErrorID" Type="int" Nullable="false" />
+          <Property Name="ExpedienteID" Type="int" />
+          <Property Name="CitaID" Type="int" />
+          <Property Name="OdontogramaID" Type="int" />
+        </EntityType>
+        <Association Name="FK_Citas_TTipoCitas">
+          <End Role="TiposCitas" Type="Self.TiposCitas" Multiplicity="1" />
+          <End Role="Citas" Type="Self.Citas" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TiposCitas">
+              <PropertyRef Name="TipoID" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="CitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBITACORA_USUARIO">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="BITACORA" Type="Self.BITACORA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="BITACORA">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TCitas">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Citas" Type="Self.Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TExpediente">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Expediente" Type="Self.Expediente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Expediente">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TOdontograma">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Odontograma" Type="Self.Odontograma" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Odontograma">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TPerfil">
+          <End Role="Estados" Type="Self.Estados" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estados">
+              <PropertyRef Name="ConsecutivoEstado" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="EstadoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TRol">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Consultar_Datos_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Correo" Type="varchar" Mode="In" />
+          <Parameter Name="Contrasenna" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Registrar_Bitacora" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Correo" Type="varchar" Mode="In" />
+          <Parameter Name="FechaHora" Type="datetime" Mode="In" />
+          <Parameter Name="CodigoError" Type="int" Mode="In" />
+          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Origen" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Registrar_Correo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="To" Type="varchar" Mode="In" />
+          <Parameter Name="ConsecutivoUsuario" Type="bigint" Mode="In" />
+          <Parameter Name="FechaHora" Type="datetime" Mode="In" />
+          <Parameter Name="CC" Type="varchar" Mode="In" />
+          <Parameter Name="Body" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Subject" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SelectAllErrors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SelectAllRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SelectAllTiposCitas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SelectAllUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SelectUsersDescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="KNG8_ProjectModelStoreContainer">
+          <EntitySet Name="BITACORA" EntityType="Self.BITACORA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Citas" EntityType="Self.Citas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Correos" EntityType="Self.Correos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estados" EntityType="Self.Estados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Expediente" EntityType="Self.Expediente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Odontograma" EntityType="Self.Odontograma" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TiposCitas" EntityType="Self.TiposCitas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Citas_TTipoCitas" Association="Self.FK_Citas_TTipoCitas">
+            <End Role="TiposCitas" EntitySet="TiposCitas" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBITACORA_USUARIO" Association="Self.FK_TBITACORA_USUARIO">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="BITACORA" EntitySet="BITACORA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TCitas" Association="Self.FK_USUARIOS_TCitas">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TExpediente" Association="Self.FK_USUARIOS_TExpediente">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Expediente" EntitySet="Expediente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TOdontograma" Association="Self.FK_USUARIOS_TOdontograma">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Odontograma" EntitySet="Odontograma" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TPerfil" Association="Self.FK_USUARIOS_TPerfil">
+            <End Role="Estados" EntitySet="Estados" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TRol" Association="Self.FK_USUARIOS_TRol">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KNG8_ProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BITACORA">
+          <Key>
+            <PropertyRef Name="ConsecutivoError" />
+          </Key>
+          <Property Name="ConsecutivoError" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CodigoError" Type="Int32" Nullable="false" />
+          <Property Name="DescripcionBitacora" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Origen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_TBITACORA_USUARIO" FromRole="BITACORA" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Cita">
+          <Key>
+            <PropertyRef Name="CitaID" />
+          </Key>
+          <Property Name="CitaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="TipoID" Type="Int32" Nullable="false" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DescripcionCitas" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TiposCita" Relationship="Self.FK_Citas_TTipoCitas" FromRole="Citas" ToRole="TiposCitas" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_USUARIOS_TCitas" FromRole="Citas" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Correo">
+          <Key>
+            <PropertyRef Name="ConsecutivoCorreos" />
+          </Key>
+          <Property Name="ConsecutivoCorreos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="To" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CC" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Subject" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="ConsecutivoEstado" />
+          </Key>
+          <Property Name="ConsecutivoEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DescripcionEstado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_USUARIOS_TPerfil" FromRole="Estados" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Expediente">
+          <Key>
+            <PropertyRef Name="ConsecutivoExpediente" />
+          </Key>
+          <Property Name="ConsecutivoExpediente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DescripcionExpediente" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_USUARIOS_TExpediente" FromRole="Expediente" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Odontograma">
+          <Key>
+            <PropertyRef Name="OdontogramaID" />
+          </Key>
+          <Property Name="OdontogramaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="NDiente" Type="Int32" Nullable="false" />
+          <Property Name="CoordenadaUno" Type="Int32" />
+          <Property Name="CoordenadaDos" Type="Int32" />
+          <Property Name="CoordenadaTres" Type="Int32" />
+          <Property Name="CoordenadaCuatro" Type="Int32" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_USUARIOS_TOdontograma" FromRole="Odontograma" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_USUARIOS_TRol" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="TiposCita">
+          <Key>
+            <PropertyRef Name="TipoID" />
+          </Key>
+          <Property Name="TipoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DescripcionTiposCitas" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cita" Relationship="Self.FK_Citas_TTipoCitas" FromRole="TiposCitas" ToRole="Citas" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="ConsecutivoUsuario" />
+          </Key>
+          <Property Name="ConsecutivoUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreCompleto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Cedula" Type="Int32" Nullable="false" />
+          <Property Name="Correo" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contrasenna" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Telefono" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="EstadoID" Type="Int32" Nullable="false" />
+          <Property Name="ErrorID" Type="Int32" Nullable="false" />
+          <Property Name="ExpedienteID" Type="Int32" />
+          <Property Name="CitaID" Type="Int32" />
+          <Property Name="OdontogramaID" Type="Int32" />
+          <NavigationProperty Name="BITACORAs" Relationship="Self.FK_TBITACORA_USUARIO" FromRole="Usuarios" ToRole="BITACORA" />
+          <NavigationProperty Name="Citas" Relationship="Self.FK_USUARIOS_TCitas" FromRole="Usuarios" ToRole="Citas" />
+          <NavigationProperty Name="Estado" Relationship="Self.FK_USUARIOS_TPerfil" FromRole="Usuarios" ToRole="Estados" />
+          <NavigationProperty Name="Expedientes" Relationship="Self.FK_USUARIOS_TExpediente" FromRole="Usuarios" ToRole="Expediente" />
+          <NavigationProperty Name="Odontogramas" Relationship="Self.FK_USUARIOS_TOdontograma" FromRole="Usuarios" ToRole="Odontograma" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_USUARIOS_TRol" FromRole="Usuarios" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK_TBITACORA_USUARIO">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="BITACORA" Type="Self.BITACORA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="BITACORA">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Citas_TTipoCitas">
+          <End Role="TiposCitas" Type="Self.TiposCita" Multiplicity="1" />
+          <End Role="Citas" Type="Self.Cita" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="TiposCitas">
+              <PropertyRef Name="TipoID" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="CitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TCitas">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Citas" Type="Self.Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TPerfil">
+          <End Role="Estados" Type="Self.Estado" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estados">
+              <PropertyRef Name="ConsecutivoEstado" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="EstadoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TExpediente">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Expediente" Type="Self.Expediente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Expediente">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TOdontograma">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Odontograma" Type="Self.Odontograma" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Principal>
+            <Dependent Role="Odontograma">
+              <PropertyRef Name="ConsecutivoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIOS_TRol">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KNG8_ProjectEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BITACORAs" EntityType="Self.BITACORA" />
+          <EntitySet Name="Citas" EntityType="Self.Cita" />
+          <EntitySet Name="Correos" EntityType="Self.Correo" />
+          <EntitySet Name="Estados" EntityType="Self.Estado" />
+          <EntitySet Name="Expedientes" EntityType="Self.Expediente" />
+          <EntitySet Name="Odontogramas" EntityType="Self.Odontograma" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="TiposCitas" EntityType="Self.TiposCita" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK_TBITACORA_USUARIO" Association="Self.FK_TBITACORA_USUARIO">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="BITACORA" EntitySet="BITACORAs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Citas_TTipoCitas" Association="Self.FK_Citas_TTipoCitas">
+            <End Role="TiposCitas" EntitySet="TiposCitas" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TCitas" Association="Self.FK_USUARIOS_TCitas">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TPerfil" Association="Self.FK_USUARIOS_TPerfil">
+            <End Role="Estados" EntitySet="Estados" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TExpediente" Association="Self.FK_USUARIOS_TExpediente">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Expediente" EntitySet="Expedientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TOdontograma" Association="Self.FK_USUARIOS_TOdontograma">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Odontograma" EntitySet="Odontogramas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIOS_TRol" Association="Self.FK_USUARIOS_TRol">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <FunctionImport Name="Consultar_Datos_Usuario" ReturnType="Collection(KNG8_ProjectModel.Consultar_Datos_Usuario_Result)">
+            <Parameter Name="Correo" Mode="In" Type="String" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Registrar_Bitacora">
+            <Parameter Name="Correo" Mode="In" Type="String" />
+            <Parameter Name="FechaHora" Mode="In" Type="DateTime" />
+            <Parameter Name="CodigoError" Mode="In" Type="Int32" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Origen" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Registrar_Correo">
+            <Parameter Name="To" Mode="In" Type="String" />
+            <Parameter Name="ConsecutivoUsuario" Mode="In" Type="Int64" />
+            <Parameter Name="FechaHora" Mode="In" Type="DateTime" />
+            <Parameter Name="CC" Mode="In" Type="String" />
+            <Parameter Name="Body" Mode="In" Type="String" />
+            <Parameter Name="Subject" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SelectAllErrors" ReturnType="Collection(KNG8_ProjectModel.SelectAllErrors_Result)" />
+          <FunctionImport Name="SelectAllRoles" ReturnType="Collection(KNG8_ProjectModel.SelectAllRoles_Result)" />
+          <FunctionImport Name="SelectAllTiposCitas" ReturnType="Collection(KNG8_ProjectModel.SelectAllTiposCitas_Result)" />
+          <FunctionImport Name="SelectAllUsers" ReturnType="Collection(KNG8_ProjectModel.SelectAllUsers_Result)" />
+          <FunctionImport Name="SelectUsersDescription" ReturnType="Collection(KNG8_ProjectModel.SelectUsersDescription_Result)" />
+        </EntityContainer>
+        <ComplexType Name="Consultar_Datos_Usuario_Result">
+          <Property Type="Int32" Name="ConsecutivoUsuario" Nullable="false" />
+          <Property Type="String" Name="Correo" Nullable="false" MaxLength="75" />
+          <Property Type="String" Name="NombreCompleto" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Int32" Name="EstadoID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SelectAllErrors_Result">
+          <Property Type="Int32" Name="ConsecutivoError" Nullable="false" />
+          <Property Type="Int32" Name="ConsecutivoUsuario" Nullable="false" />
+          <Property Type="DateTime" Name="FechaHora" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="CodigoError" Nullable="false" />
+          <Property Type="String" Name="DescripcionBitacora" Nullable="false" />
+          <Property Type="String" Name="Origen" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SelectAllRoles_Result">
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SelectAllTiposCitas_Result">
+          <Property Type="Int32" Name="TipoID" Nullable="false" />
+          <Property Type="String" Name="DescripcionTiposCitas" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SelectAllUsers_Result">
+          <Property Type="Int32" Name="ConsecutivoUsuario" Nullable="false" />
+          <Property Type="String" Name="NombreCompleto" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="Cedula" Nullable="false" />
+          <Property Type="String" Name="Correo" Nullable="false" MaxLength="75" />
+          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="75" />
+          <Property Type="DateTime" Name="FechaNacimiento" Nullable="false" />
+          <Property Type="Int32" Name="Telefono" Nullable="false" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="Int32" Name="EstadoID" Nullable="false" />
+          <Property Type="Int32" Name="ErrorID" Nullable="false" />
+          <Property Type="Int32" Name="ExpedienteID" Nullable="true" />
+          <Property Type="Int32" Name="CitaID" Nullable="true" />
+          <Property Type="Int32" Name="OdontogramaID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SelectUsersDescription_Result">
+          <Property Type="String" Name="NombreCompleto" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="Cedula" Nullable="false" />
+          <Property Type="String" Name="Correo" Nullable="false" MaxLength="75" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="DescripcionEstado" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="FechaNacimiento" Nullable="false" />
+          <Property Type="Int32" Name="Telefono" Nullable="false" />
+          <Property Type="Int32" Name="ExpedienteID" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KNG8_ProjectModelStoreContainer" CdmEntityContainer="KNG8_ProjectEntities">
+          <EntitySetMapping Name="BITACORAs">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.BITACORA">
+              <MappingFragment StoreEntitySet="BITACORA">
+                <ScalarProperty Name="ConsecutivoError" ColumnName="ConsecutivoError" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="CodigoError" ColumnName="CodigoError" />
+                <ScalarProperty Name="DescripcionBitacora" ColumnName="DescripcionBitacora" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Citas">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Cita">
+              <MappingFragment StoreEntitySet="Citas">
+                <ScalarProperty Name="CitaID" ColumnName="CitaID" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="TipoID" ColumnName="TipoID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="DescripcionCitas" ColumnName="DescripcionCitas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Correos">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Correo">
+              <MappingFragment StoreEntitySet="Correos">
+                <ScalarProperty Name="ConsecutivoCorreos" ColumnName="ConsecutivoCorreos" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estados">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Estado">
+              <MappingFragment StoreEntitySet="Estados">
+                <ScalarProperty Name="ConsecutivoEstado" ColumnName="ConsecutivoEstado" />
+                <ScalarProperty Name="DescripcionEstado" ColumnName="DescripcionEstado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expedientes">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Expediente">
+              <MappingFragment StoreEntitySet="Expediente">
+                <ScalarProperty Name="ConsecutivoExpediente" ColumnName="ConsecutivoExpediente" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="DescripcionExpediente" ColumnName="DescripcionExpediente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Odontogramas">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Odontograma">
+              <MappingFragment StoreEntitySet="Odontograma">
+                <ScalarProperty Name="OdontogramaID" ColumnName="OdontogramaID" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="NDiente" ColumnName="NDiente" />
+                <ScalarProperty Name="CoordenadaUno" ColumnName="CoordenadaUno" />
+                <ScalarProperty Name="CoordenadaDos" ColumnName="CoordenadaDos" />
+                <ScalarProperty Name="CoordenadaTres" ColumnName="CoordenadaTres" />
+                <ScalarProperty Name="CoordenadaCuatro" ColumnName="CoordenadaCuatro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposCitas">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.TiposCita">
+              <MappingFragment StoreEntitySet="TiposCitas">
+                <ScalarProperty Name="TipoID" ColumnName="TipoID" />
+                <ScalarProperty Name="DescripcionTiposCitas" ColumnName="DescripcionTiposCitas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="KNG8_ProjectModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
+                <ScalarProperty Name="ErrorID" ColumnName="ErrorID" />
+                <ScalarProperty Name="ExpedienteID" ColumnName="ExpedienteID" />
+                <ScalarProperty Name="CitaID" ColumnName="CitaID" />
+                <ScalarProperty Name="OdontogramaID" ColumnName="OdontogramaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Consultar_Datos_Usuario" FunctionName="KNG8_ProjectModel.Store.Consultar_Datos_Usuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.Consultar_Datos_Usuario_Result">
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Registrar_Bitacora" FunctionName="KNG8_ProjectModel.Store.Registrar_Bitacora" />
+          <FunctionImportMapping FunctionImportName="Registrar_Correo" FunctionName="KNG8_ProjectModel.Store.Registrar_Correo" />
+          <FunctionImportMapping FunctionImportName="SelectAllErrors" FunctionName="KNG8_ProjectModel.Store.SelectAllErrors">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.SelectAllErrors_Result">
+                <ScalarProperty Name="ConsecutivoError" ColumnName="ConsecutivoError" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="CodigoError" ColumnName="CodigoError" />
+                <ScalarProperty Name="DescripcionBitacora" ColumnName="DescripcionBitacora" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectAllRoles" FunctionName="KNG8_ProjectModel.Store.SelectAllRoles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.SelectAllRoles_Result">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectAllTiposCitas" FunctionName="KNG8_ProjectModel.Store.SelectAllTiposCitas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.SelectAllTiposCitas_Result">
+                <ScalarProperty Name="TipoID" ColumnName="TipoID" />
+                <ScalarProperty Name="DescripcionTiposCitas" ColumnName="DescripcionTiposCitas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectAllUsers" FunctionName="KNG8_ProjectModel.Store.SelectAllUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.SelectAllUsers_Result">
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
+                <ScalarProperty Name="ErrorID" ColumnName="ErrorID" />
+                <ScalarProperty Name="ExpedienteID" ColumnName="ExpedienteID" />
+                <ScalarProperty Name="CitaID" ColumnName="CitaID" />
+                <ScalarProperty Name="OdontogramaID" ColumnName="OdontogramaID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectUsersDescription" FunctionName="KNG8_ProjectModel.Store.SelectUsersDescription">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KNG8_ProjectModel.SelectUsersDescription_Result">
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="DescripcionEstado" ColumnName="DescripcionEstado" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="ExpedienteID" ColumnName="ExpedienteID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
